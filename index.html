@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Special</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#0a0000,#1a0000);
+color:white;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* HEART GLOW FINAL PAGE */
+body.final-glow{
+animation:heartGlow 2s infinite alternate;
+}
+
+@keyframes heartGlow{
+from{background:#120000;}
+to{background:#2a0000;}
+}
+
+.container{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:20px;
+position:relative;
+}
+
+h1{
+font-size:3rem;
+color:#ff2e63;
+text-shadow:0 0 20px #ff2e63;
+}
+
+button{
+margin:15px;
+padding:15px 40px;
+font-size:1.2rem;
+border:none;
+border-radius:40px;
+cursor:pointer;
+transition:.3s;
+}
+
+.yes{
+background:#ff2e63;
+color:white;
+box-shadow:0 0 20px #ff2e63;
+}
+
+.no{
+background:transparent;
+color:#ff2e63;
+border:2px solid #ff2e63;
+}
+
+button:hover{ transform:scale(1.1); }
+
+.hidden{ display:none; }
+
+/* FLOATING ITEMS */
+.floating{
+position:fixed;
+font-size:clamp(18px,3vw,32px);
+pointer-events:none;
+animation:floatUp linear infinite;
+z-index:1;
+}
+
+@keyframes floatUp{
+from{transform:translateY(110vh);opacity:0;}
+to{transform:translateY(-10vh);opacity:1;}
+}
+
+/* PETALS */
+.petal{
+position:fixed;
+font-size:20px;
+animation:petalFall linear forwards;
+}
+
+@keyframes petalFall{
+from{transform:translateY(-10vh) rotate(0);}
+to{transform:translateY(110vh) rotate(360deg);}
+}
+
+/* CRACKERS */
+.cracker{
+position:fixed;
+font-size:24px;
+animation:explode 1.2s forwards;
+}
+
+@keyframes explode{
+from{opacity:1; transform:scale(.5);}
+to{opacity:0; transform:scale(2) translateY(-150px);}
+}
+
+/* BIG ROSE */
+.big-rose{
+font-size:120px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.2);}
+100%{transform:scale(1);}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="container" id="page1">
+<h1>A Special Message ❤️</h1>
+
+<p>
+এই বুবু, একটা কথা বলি?  
+এই ভ্যালেন্টাইনটা… আমার সাথে কাটাবে?  
+আমি কিন্তু সিরিয়াস 😄
+</p>
+
+<h2>Will you be my Permanent Valentine?</h2>
+
+<button class="yes" onclick="yesClicked()">YES</button>
+<button class="no" onclick="startPickups()">NO</button>
+</div>
+
+<!-- PICKUP PAGE -->
+<div class="container hidden" id="pickupPage">
+<div id="pickupText" style="font-size:1.6rem;color:#ff7aa2;margin:25px;"></div>
+
+<h2>Still no?</h2>
+
+<button class="yes" onclick="yesClicked()">YES</button>
+<button class="no" onclick="nextPickup()">NO</button>
+</div>
+
+<!-- FINAL FORCE -->
+<div class="container hidden" id="finalForcePage">
+<h1>Last Chance 😌</h1>
+<h2>Will you be my permanent Valentine?</h2>
+
+<button class="yes" onclick="yesClicked()">YES</button>
+<button class="no" id="finalNoBtn">NO</button>
+</div>
+
+<!-- FINAL PAGE -->
+<div class="container hidden" id="finalPage">
+<h1>Yay ❤️</h1>
+
+<p>
+বুবু,  
+এভাবেই পরে বিয়ের প্রপোজাল accept করতে হবে 😏❤️  
+কবে যাচ্ছি ডেটে বলো তো?
+</p>
+
+<h2>Send smiling selfie 😊</h2>
+
+<div class="big-rose">🌹</div>
+
+<br>
+
+<audio id="loveSong" controls loop>
+<source src="apna-mujhe-tu-laga.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+<script>
+
+/* FLOATING BACKGROUND FULL SCREEN */
+const items=["🌹","🌸","🎈","💖","🌺","❤️","✨"];
+
+function createFloating(){
+const el=document.createElement("div");
+el.className="floating";
+el.innerText=items[Math.floor(Math.random()*items.length)];
+
+el.style.left=Math.random()*window.innerWidth+"px";
+el.style.animationDuration=(4+Math.random()*6)+"s";
+
+document.body.appendChild(el);
+setTimeout(()=>el.remove(),12000);
+}
+
+function startFloating(){
+let speed=700;
+if(window.innerWidth>1200) speed=300;
+else if(window.innerWidth>800) speed=450;
+else if(window.innerWidth>500) speed=600;
+else speed=750;
+
+setInterval(createFloating,speed);
+}
+startFloating();
+
+/* PETAL RAIN */
+function petalRain(){
+for(let i=0;i<40;i++){
+const p=document.createElement("div");
+p.className="petal";
+p.innerText="🌹";
+p.style.left=Math.random()*window.innerWidth+"px";
+p.style.animationDuration=(4+Math.random()*3)+"s";
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),7000);
+}
+}
+
+/* CRACKERS FULL SCREEN */
+function burstCrackers(){
+let total=Math.floor(window.innerWidth/15);
+for(let i=0;i<total;i++){
+const c=document.createElement("div");
+c.className="cracker";
+c.innerText=["✨","🎆","🎇","💥"][Math.floor(Math.random()*4)];
+c.style.left=Math.random()*window.innerWidth+"px";
+c.style.top=Math.random()*window.innerHeight+"px";
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),1500);
+}
+}
+
+/* PICKUPS */
+const pickups=[
+"Just say yes… I’ll stop annoying you (maybe).",
+"Say yes… you’re stuck with me anyway.",
+"Press yes… you know I’m your favorite problem.",
+"Say yes… I already told my heart.",
+"Don’t make me beg… maybe little.",
+"Say yes… lifetime teasing rights.",
+"Press yes… celebration ready.",
+"Say yes… you look cuter.",
+"Press yes… official now.",
+"Say yes… spot in my heart reserved.",
+"Press yes… not asking again (I will).",
+"Say yes… sharing food sometimes.",
+"Press yes… you smiling already.",
+"Say yes… before drama.",
+"Press yes… future us happy.",
+"Say yes… husband upgrade coming.",
+"Press yes… gossip listener mode.",
+"Say yes… love you too much.",
+"Press yes… patience testing not allowed.",
+"Say yes… forever asking otherwise."
+];
+
+let pickupIndex=0;
+
+function startPickups(){
+page1.classList.add("hidden");
+pickupPage.classList.remove("hidden");
+pickupText.innerText=pickups[pickupIndex];
+}
+
+function nextPickup(){
+pickupIndex++;
+if(pickupIndex>=pickups.length){
+pickupPage.classList.add("hidden");
+finalForcePage.classList.remove("hidden");
+return;
+}
+pickupText.innerText=pickups[pickupIndex];
+}
+
+/* YES CLICK FINAL */
+function yesClicked(){
+page1.classList.add("hidden");
+pickupPage.classList.add("hidden");
+finalForcePage.classList.add("hidden");
+finalPage.classList.remove("hidden");
+
+document.body.classList.add("final-glow");
+
+loveSong.play().catch(()=>{});
+burstCrackers();
+petalRain();
+}
+
+/* MOVING NO */
+const finalNoBtn=document.getElementById("finalNoBtn");
+
+function moveFinal(){
+const p=finalNoBtn.parentElement;
+finalNoBtn.style.position="absolute";
+finalNoBtn.style.left=Math.random()*(p.clientWidth-100)+"px";
+finalNoBtn.style.top=Math.random()*(p.clientHeight-40)+"px";
+}
+finalNoBtn.addEventListener("mouseover",moveFinal);
+
+</script>
+
+</body>
+</html>
